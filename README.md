@@ -23,7 +23,11 @@ Equation class is a SymPy based class structured to store a set of equations and
 
 1. **Constructor**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recive a list of SymPy expressions an a tuple containing the set of symbols (in String) that compose the system
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recive a list of SymPy expressions and a tuple containing the set of symbols (in String) that compose the system
+
+```python
+
+```
 
 2. _Equation_.**str_to_expression**(string_expression_list)
 
@@ -54,6 +58,10 @@ expr = Equation( expr, ('x', 'y', 'z') )
 eval = expr.at( (2,3,4) ) # Respect the given in the constructor
 print(eval)
 ```
+```
+>>Console output
+[-8.  0. -3.]
+```
 
 ## The EquationSolver class
 
@@ -62,6 +70,7 @@ print(eval)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recive a Equation class
 
 2. obj.**solve**(_self_, initial_values, stop_criterion, max_iterations = 30, stop_criterion_value = 0.01, generate_output_info = False [WIP])
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Solve a determinated Equation System and return the solution vector in Numpy.ndarray type.
 
 This method is the core of the program, it will tries to solve the given sytem with Newton Method.
@@ -71,4 +80,32 @@ This method is the core of the program, it will tries to solve the given sytem w
 | stop_criterion       | Should be _EquationSolver_.max_relative_error or  _EquationSolver_.max_absolute_error                          | - |
 | max_iterations       | The max number of steps to tries hit the stop_criterion  before the method returns                             | 30 |
 | stop_criterion_value | The values that the stop_criterion needs to get to reach the convergence and return a solution                 | 0.01|
+
+Ex.
+
+```python
+from non_linear_equations import Equation
+from non_linear_solver import EquationSolver
+
+
+expr = Equation.str_to_expression( ["x**2 + y**2 + z**2 - 8",
+                                    "x**2 + y**2 - z**2",
+                                    "y**2 - x + z - 3"])
+expr = Equation( expr, ('x', 'y', 'z') )
+
+equation_solver = EquationSolver(expr)
+
+solution = equation_solver.solve( (1.5, 2.1, 3.4),
+                                  EquationSolver.max_relative_error,
+                                  stop_criterion_value=0.1)
+
+print(solution)
+print(type( solution ))
+```
+
+```
+>>Console output
+[1.3028102  1.5174782  2.00008165]
+<class 'numpy.ndarray'>
+```
 
